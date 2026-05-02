@@ -151,6 +151,9 @@ def create_checkout_session():
                         'description': 'Accès Premium mensuel au bot Discord',
                     },
                     'unit_amount': PREMIUM_PRICE,
+                    'recurring': {
+                        'interval': 'month'
+                    }
                 },
                 'quantity': 1,
             }],
