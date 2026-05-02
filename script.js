@@ -14,9 +14,69 @@ const commands = {
       description: "Joue une recherche ou un lien YouTube, Spotify ou Deezer avec une file d'attente.",
     },
     {
+      name: "/music pause",
+      label: "Pause",
+      description: "Met la musique en pause.",
+    },
+    {
+      name: "/music resume",
+      label: "Resume",
+      description: "Reprend la musique.",
+    },
+    {
+      name: "/music skip",
+      label: "Skip",
+      description: "Passe à la musique suivante.",
+    },
+    {
+      name: "/music voteskip",
+      label: "Vote Skip",
+      description: "Vote pour passer à la musique suivante.",
+    },
+    {
+      name: "/music stop",
+      label: "Stop",
+      description: "Stoppe la musique et vide la file.",
+    },
+    {
+      name: "/music leave",
+      label: "Leave",
+      description: "Déconnecte le bot du vocal.",
+    },
+    {
       name: "/music queue",
       label: "Queue",
-      description: "Affiche les titres en attente, le volume, le repeat, le shuffle et l'autoplay.",
+      description: "Affiche la file d'attente.",
+    },
+    {
+      name: "/music now",
+      label: "Now",
+      description: "Affiche le titre en cours.",
+    },
+    {
+      name: "/music volume",
+      label: "Volume",
+      description: "Règle le volume entre 1 et 200.",
+    },
+    {
+      name: "/music loop",
+      label: "Loop",
+      description: "Active ou désactive la répétition du titre.",
+    },
+    {
+      name: "/music repeat",
+      label: "Repeat",
+      description: "Règle le mode repeat.",
+    },
+    {
+      name: "/music autoplay",
+      label: "Autoplay",
+      description: "Active ou désactive l'autoplay.",
+    },
+    {
+      name: "/music shuffle",
+      label: "Shuffle",
+      description: "Mélange la file et active/désactive le mode shuffle.",
     },
     {
       name: "/music lyrics",
@@ -44,6 +104,16 @@ const commands = {
       name: "/game connect4",
       label: "Jeu",
       description: "Joue à puissance 4 contre un membre directement sur Discord.",
+    },
+    {
+      name: "/mood",
+      label: "GIF",
+      description: "Affiche l'humeur d'un membre avec une réaction anime.",
+    },
+    {
+      name: "/rp hug",
+      label: "RP",
+      description: "Lance une action RP avec GIF et compteur entre membres.",
     },
   ],
   anime: [
@@ -88,6 +158,90 @@ const commands = {
       name: "/rankcard",
       label: "Level",
       description: "Affiche une carte de rang visuelle avec XP et progression.",
+    },
+    {
+      name: "/profile",
+      label: "Profile",
+      description: "Affiche ton profil économie complet.",
+    },
+    {
+      name: "/rank",
+      label: "Rank",
+      description: "Affiche le rang niveau d'un membre.",
+    },
+    {
+      name: "/rep",
+      label: "Rep",
+      description: "Donne 1 point de réputation à un membre.",
+    },
+  ],
+  admin: [
+    {
+      name: "/setwelcome",
+      label: "Welcome",
+      description: "Définit le salon de bienvenue.",
+    },
+    {
+      name: "/setlogs",
+      label: "Logs",
+      description: "Définit le salon de logs.",
+    },
+    {
+      name: "/setannounce",
+      label: "Announce",
+      description: "Définit le salon d'annonce pour les events.",
+    },
+    {
+      name: "/setlevelchannel",
+      label: "Level Channel",
+      description: "Définit le salon d'annonce des niveaux.",
+    },
+    {
+      name: "/setstaffrole",
+      label: "Staff Role",
+      description: "Définit le rôle staff utilisé par le bot.",
+    },
+    {
+      name: "/addshoprole",
+      label: "Add Shop Role",
+      description: "Ajoute un rôle achetable dans la boutique.",
+    },
+    {
+      name: "/removeshoprole",
+      label: "Remove Shop Role",
+      description: "Retire un rôle de la boutique.",
+    },
+  ],
+  utility: [
+    {
+      name: "/help",
+      label: "Help",
+      description: "Affiche l'aide du bot.",
+    },
+    {
+      name: "/hub",
+      label: "Hub",
+      description: "Ouvre le centre d'animation du bot.",
+    },
+    {
+      name: "/panel",
+      label: "Panel",
+      description: "Envoie le panneau d'animation dans un salon.",
+    },
+    {
+      name: "/shoppanel",
+      label: "Shop Panel",
+      description: "Envoie un panneau boutique dans un salon.",
+    },
+    {
+      name: "/confession",
+      label: "Confession",
+      description: "Partage un message anonyme avec boutons d'interaction.",
+    },
+    {
+      name: "/event",
+      label: "Event",
+      description: "Crée un event avec boutons RSVP.",
     },
   ],
 };
@@ -255,6 +409,55 @@ function startManaField() {
   window.addEventListener("resize", resizeCanvas);
 }
 
+function renderHelpCommands(category = "music") {
+  const items = commands[category] || commands.music;
+  const helpList = document.querySelector("#help-list");
+  helpList.innerHTML = items
+    .map(
+      (command) => `
+        <article class="help-item">
+          <div class="help-item-icon">
+            <span class="ui-icon">${getCategoryIcon(category)}</span>
+          </div>
+          <div class="help-item-content">
+            <strong class="help-item-name">${command.name}</strong>
+            <span class="help-item-label">${command.label}</span>
+            <p class="help-item-description">${command.description}</p>
+          </div>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function getCategoryIcon(category) {
+  const icons = {
+    music: "♪",
+    fun: "🎮",
+    anime: "✦",
+    economy: "💰",
+    admin: "⚙",
+    utility: "🔧"
+  };
+  return icons[category] || "❓";
+}
+
+function bindHelpTabs() {
+  const helpTabs = document.querySelectorAll(".help-tab");
+  helpTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      helpTabs.forEach((item) => {
+        item.classList.remove("active");
+        item.setAttribute("aria-selected", "false");
+      });
+
+      tab.classList.add("active");
+      tab.setAttribute("aria-selected", "true");
+      renderHelpCommands(tab.dataset.category);
+    });
+  });
+}
+
 window.addEventListener("beforeunload", () => {
   window.cancelAnimationFrame(rafId);
 });
@@ -264,4 +467,7 @@ bindCommandTabs();
 bindNavigation();
 bindInviteLinks();
 bindRevealAnimation();
+renderHelpCommands();
+bindHelpTabs();
+bindHelpTabs();
 startManaField();
