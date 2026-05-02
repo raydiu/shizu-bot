@@ -12,10 +12,20 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Configuration CORS pour le développement
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://raydiu.github.io/shizu-bot')
+
+# Configuration CORS pour le développement et GitHub Pages
+ALLOWED_ORIGINS = {
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    FRONTEND_URL
+}
+
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:8000')
+    origin = request.headers.get('Origin')
+    if origin in ALLOWED_ORIGINS:
+        response.headers.add('Access-Control-Allow-Origin', origin)
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
@@ -25,7 +35,6 @@ STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', 'dev_webhook_secret')
 BOT_WEBHOOK_URL = os.getenv('BOT_WEBHOOK_URL', 'http://localhost:8080/webhooks/payment')
 BOT_WEBHOOK_SECRET = os.getenv('BOT_WEBHOOK_SECRET', 'dev_bot_secret')
-
 # Prix mensuel (en cents)
 PREMIUM_PRICE = 500  # 5€
 
@@ -141,8 +150,8 @@ def create_checkout_session():
                 'quantity': 1,
             }],
             mode='subscription',  # Abonnement mensuel
-            success_url=f"{os.getenv('FRONTEND_URL', 'https://votredomaine.github.io')}/success.html?session_id={{CHECKOUT_SESSION_ID}}",
-            cancel_url=f"{os.getenv('FRONTEND_URL', 'https://votredomaine.github.io')}/",
+            success_url=f"{FRONTEND_URL}/success.html?session_id={{CHECKOUT_SESSION_ID}}",
+            cancel_url=f"{FRONTEND_URL}/",
             metadata={
                 'discord_user_id': discord_id,
                 'guild_id': guild_id,
@@ -291,4 +300,5 @@ if __name__ == '__main__':
         print("💡 Utilisez /dev/activate-premium pour tester sans paiement")
     else:
         print("💳 Mode production avec Stripe")
-    app.run(debug=True, host='0.0.0.0', port=5002)
+    port = int(os.getenv('PORT', '5001'))
+    app.run(debug=True, host='0.0.0.0', port=port)
