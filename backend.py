@@ -33,6 +33,7 @@ def after_request(response):
 
 # Configuration Stripe (optionnel pour développement)
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PRICE_ID = os.getenv('STRIPE_PRICE_ID')
 STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', 'dev_webhook_secret')
 BOT_WEBHOOK_URL = os.getenv('BOT_WEBHOOK_URL', 'http://localhost:8080/webhooks/payment')
 BOT_WEBHOOK_SECRET = os.getenv('BOT_WEBHOOK_SECRET', 'dev_bot_secret')
@@ -141,9 +142,13 @@ def create_checkout_session():
             return jsonify({'url': fake_session_url})
 
         # Créer une session Stripe Checkout
-        session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=[{
+        if STRIPE_PRICE_ID:
+            line_items = [{
+                'price': STRIPE_PRICE_ID,
+                'quantity': 1,
+            }]
+        else:
+            line_items = [{
                 'price_data': {
                     'currency': 'eur',
                     'product_data': {
@@ -156,7 +161,11 @@ def create_checkout_session():
                     }
                 },
                 'quantity': 1,
-            }],
+            }]
+
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
             mode='subscription',  # Abonnement mensuel
             success_url=f"{FRONTEND_URL}/success.html?session_id={{CHECKOUT_SESSION_ID}}",
             cancel_url=f"{FRONTEND_URL}/",
