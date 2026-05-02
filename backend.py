@@ -5,7 +5,7 @@ import requests
 import hmac
 import hashlib
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,7 +18,8 @@ FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://raydiu.github.io/shizu-bot')
 ALLOWED_ORIGINS = {
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    FRONTEND_URL
+    FRONTEND_URL,
+    'https://raydiu.github.io'  # Ajout de l'origine racine GitHub Pages
 }
 
 @app.after_request
@@ -249,12 +250,12 @@ def dev_activate_premium():
             return jsonify({'error': 'Discord ID requis'}), 400
 
         # Calculer la date d'expiration (1 mois)
-        expire_at = datetime.utcnow() + timedelta(days=30)
+        expire_at = datetime.now(timezone.utc) + timedelta(days=30)
 
         # Préparer les données pour le bot
         bot_payload = {
             'provider': 'dev',
-            'event_id': f"dev_{discord_id}_{int(datetime.utcnow().timestamp())}",
+            'event_id': f"dev_{discord_id}_{int(datetime.now(timezone.utc).timestamp())}",
             'user_id': int(discord_id),
             'guild_id': int(guild_id),
             'status': 'completed',
