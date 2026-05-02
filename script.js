@@ -1,98 +1,113 @@
-const BOT_CLIENT_ID = "TON_CLIENT_ID";
-const SUPPORT_SERVER_URL = "#";
+const INVITE_URL =
+  "https://discord.com/oauth2/authorize?client_id=1499480527231516722&permissions=8&integration_type=0&scope=bot+applications.commands";
 
 const commands = {
-  moderation: [
+  music: [
     {
-      name: "/shield",
-      label: "Anti-Raid",
-      description: "Active une protection temporaire avec verrouillage, logs et surveillance des arrivées.",
+      name: "/music join",
+      label: "Vocal",
+      description: "Connecte Shizu Bot dans ton salon vocal pour préparer la session musique.",
     },
     {
-      name: "/warn",
-      label: "Sanction",
-      description: "Ajoute un avertissement propre avec raison, modérateur et historique du membre.",
+      name: "/music play",
+      label: "Play",
+      description: "Joue une recherche ou un lien YouTube, Spotify ou Deezer avec une file d'attente.",
     },
     {
-      name: "/mute",
-      label: "Silence",
-      description: "Coupe l'accès vocal ou textuel d'un membre pendant une durée précise.",
+      name: "/music queue",
+      label: "Queue",
+      description: "Affiche les titres en attente, le volume, le repeat, le shuffle et l'autoplay.",
     },
     {
-      name: "/ticket",
-      label: "Support",
-      description: "Ouvre un salon privé pour gérer les demandes importantes sans chaos.",
+      name: "/music lyrics",
+      label: "Lyrics",
+      description: "Affiche les paroles de la musique en cours ou d'une recherche.",
+    },
+  ],
+  fun: [
+    {
+      name: "/duel",
+      label: "Battle",
+      description: "Défie un membre en duel fun avec résultat instantané.",
+    },
+    {
+      name: "/ship",
+      label: "Love",
+      description: "Mesure la compatibilité entre deux membres avec une carte visuelle.",
+    },
+    {
+      name: "/game trivia",
+      label: "Quiz",
+      description: "Lance un quiz rapide pour réveiller le chat.",
+    },
+    {
+      name: "/game connect4",
+      label: "Jeu",
+      description: "Joue à puissance 4 contre un membre directement sur Discord.",
     },
   ],
   anime: [
     {
-      name: "/anime",
-      label: "Recherche",
-      description: "Affiche une fiche stylée pour découvrir un anime, ses infos et son ambiance.",
+      name: "/anime quote",
+      label: "Quote",
+      description: "Envoie une citation anime aléatoire dans un embed propre.",
     },
     {
-      name: "/hug",
-      label: "Social",
-      description: "Envoie une interaction anime chaleureuse avec une réponse visuelle.",
+      name: "/anime waifu",
+      label: "Profil",
+      description: "Génère un profil waifu ou husbando avec rareté et style.",
     },
     {
-      name: "/duel",
-      label: "Mini-jeu",
-      description: "Lance un duel fun entre deux membres avec un résultat façon scène d'action.",
+      name: "/rp hug",
+      label: "RP",
+      description: "Lance une action RP avec GIF et compteur entre membres.",
     },
     {
-      name: "/quote",
-      label: "Lore",
-      description: "Génère une citation anime ou fantasy pour donner du style au chat.",
+      name: "/mood",
+      label: "GIF",
+      description: "Affiche l'humeur d'un membre avec une réaction anime.",
     },
   ],
-  utility: [
+  economy: [
     {
-      name: "/setup",
-      label: "Core",
-      description: "Configure les salons, rôles, logs et modules importants du serveur.",
+      name: "/daily",
+      label: "Cash",
+      description: "Récupère une récompense quotidienne et augmente ta série.",
     },
     {
-      name: "/profile",
-      label: "Membre",
-      description: "Affiche une carte utilisateur avec niveau, activité et badges.",
+      name: "/mine",
+      label: "Mine",
+      description: "Trouve des minerais, puis revends-les avec /sellores.",
     },
     {
-      name: "/server",
-      label: "Info",
-      description: "Montre les statistiques principales du serveur dans un panneau lisible.",
+      name: "/shop",
+      label: "Shop",
+      description: "Ouvre la boutique du serveur avec objets, titres, badges et rôles.",
     },
     {
-      name: "/ping",
-      label: "Status",
-      description: "Vérifie la latence du bot et l'état du système en temps réel.",
+      name: "/rankcard",
+      label: "Level",
+      description: "Affiche une carte de rang visuelle avec XP et progression.",
     },
   ],
 };
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const canvas = document.querySelector("#mana-field");
-const ctx = canvas.getContext("2d");
+const ctx = canvas?.getContext("2d");
 const tabs = document.querySelectorAll(".command-tab");
 const commandList = document.querySelector("#command-list");
 const navToggle = document.querySelector(".nav-toggle");
 const nav = document.querySelector(".site-nav");
 const inviteLinks = document.querySelectorAll(".invite-link");
-const supportLinks = document.querySelectorAll('a[aria-label="Rejoindre le support Discord"]');
 
 let particles = [];
 let width = 0;
 let height = 0;
 let rafId = 0;
 
-function setIconLibrary() {
-  if (window.lucide) {
-    window.lucide.createIcons();
-  }
-}
-
-function renderCommands(category = "moderation") {
-  const items = commands[category] || commands.moderation;
+function renderCommands(category = "music") {
+  const items = commands[category] || commands.music;
   commandList.innerHTML = items
     .map(
       (command) => `
@@ -122,55 +137,25 @@ function bindCommandTabs() {
 }
 
 function bindNavigation() {
-  navToggle.addEventListener("click", () => {
+  navToggle?.addEventListener("click", () => {
     const isOpen = nav.classList.toggle("open");
     navToggle.setAttribute("aria-expanded", String(isOpen));
   });
 
-  nav.querySelectorAll("a").forEach((link) => {
+  nav?.querySelectorAll("a").forEach((link) => {
     link.addEventListener("click", () => {
       nav.classList.remove("open");
-      navToggle.setAttribute("aria-expanded", "false");
+      navToggle?.setAttribute("aria-expanded", "false");
     });
   });
 }
 
-function bindExternalLinks() {
-  const hasClientId = BOT_CLIENT_ID && BOT_CLIENT_ID !== "TON_CLIENT_ID";
-  const inviteUrl = `https://discord.com/oauth2/authorize?client_id=${BOT_CLIENT_ID}&permissions=8&scope=bot%20applications.commands`;
-
+function bindInviteLinks() {
   inviteLinks.forEach((link) => {
-    link.href = hasClientId ? inviteUrl : "#invite";
-    link.addEventListener("click", (event) => {
-      if (!hasClientId) {
-        event.preventDefault();
-        showPulseMessage("Ajoute l'ID client Discord dans script.js pour activer l'invitation.");
-      }
-    });
+    link.href = INVITE_URL;
+    link.target = "_blank";
+    link.rel = "noreferrer";
   });
-
-  supportLinks.forEach((link) => {
-    link.href = SUPPORT_SERVER_URL;
-    link.addEventListener("click", (event) => {
-      if (!SUPPORT_SERVER_URL || SUPPORT_SERVER_URL === "#") {
-        event.preventDefault();
-        showPulseMessage("Ajoute ton lien de serveur support dans script.js.");
-      }
-    });
-  });
-}
-
-function showPulseMessage(message) {
-  const toast = document.createElement("div");
-  toast.className = "system-toast";
-  toast.textContent = message;
-  document.body.appendChild(toast);
-
-  window.setTimeout(() => toast.classList.add("visible"), 20);
-  window.setTimeout(() => {
-    toast.classList.remove("visible");
-    window.setTimeout(() => toast.remove(), 260);
-  }, 3200);
 }
 
 function bindRevealAnimation() {
@@ -191,7 +176,7 @@ function bindRevealAnimation() {
         }
       });
     },
-    { threshold: 0.18 }
+    { threshold: 0.16 }
   );
 
   revealItems.forEach((item) => observer.observe(item));
@@ -210,15 +195,15 @@ function resizeCanvas() {
 }
 
 function createParticles() {
-  const count = Math.min(110, Math.floor((width * height) / 13500));
+  const count = Math.min(120, Math.floor((width * height) / 12500));
   particles = Array.from({ length: count }, () => ({
     x: Math.random() * width,
     y: Math.random() * height,
-    size: Math.random() * 2.2 + 0.7,
-    speedX: (Math.random() - 0.5) * 0.32,
-    speedY: Math.random() * -0.45 - 0.08,
-    hue: Math.random() > 0.72 ? 48 : Math.random() > 0.42 ? 188 : 260,
-    alpha: Math.random() * 0.52 + 0.18,
+    size: Math.random() * 2.4 + 0.7,
+    speedX: (Math.random() - 0.5) * 0.34,
+    speedY: Math.random() * -0.48 - 0.08,
+    hue: Math.random() > 0.72 ? 278 : Math.random() > 0.38 ? 188 : 205,
+    alpha: Math.random() * 0.58 + 0.18,
   }));
 }
 
@@ -236,8 +221,8 @@ function drawManaField() {
     ctx.beginPath();
     ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
     ctx.fillStyle = `hsla(${particle.hue}, 100%, 72%, ${particle.alpha})`;
-    ctx.shadowBlur = 18;
-    ctx.shadowColor = `hsla(${particle.hue}, 100%, 70%, 0.9)`;
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = `hsla(${particle.hue}, 100%, 70%, 0.95)`;
     ctx.fill();
     ctx.shadowBlur = 0;
 
@@ -245,11 +230,11 @@ function drawManaField() {
       const other = particles[next];
       const distance = Math.hypot(particle.x - other.x, particle.y - other.y);
 
-      if (distance < 96) {
+      if (distance < 92) {
         ctx.beginPath();
         ctx.moveTo(particle.x, particle.y);
         ctx.lineTo(other.x, other.y);
-        ctx.strokeStyle = `rgba(101, 239, 255, ${0.11 - distance / 1200})`;
+        ctx.strokeStyle = `rgba(101, 239, 255, ${0.1 - distance / 1150})`;
         ctx.lineWidth = 1;
         ctx.stroke();
       }
@@ -260,8 +245,8 @@ function drawManaField() {
 }
 
 function startManaField() {
-  if (reducedMotion) {
-    canvas.remove();
+  if (!canvas || !ctx || reducedMotion) {
+    canvas?.remove();
     return;
   }
 
@@ -274,10 +259,9 @@ window.addEventListener("beforeunload", () => {
   window.cancelAnimationFrame(rafId);
 });
 
-setIconLibrary();
 renderCommands();
 bindCommandTabs();
 bindNavigation();
-bindExternalLinks();
+bindInviteLinks();
 bindRevealAnimation();
 startManaField();
