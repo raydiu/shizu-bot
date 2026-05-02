@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     
     <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https:; connect-src 'self' https://discord.com; frame-ancestors 'none';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https:; connect-src 'self' https://discord.com http://localhost:5002; frame-ancestors 'none';" />
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
     <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
@@ -144,6 +144,10 @@
               <span class="ui-icon">♪</span>
               Voir le vocal
             </a>
+            <button class="btn btn-premium" id="premium-btn">
+              <span class="ui-icon">⭐</span>
+              Devenir Premium
+            </button>
           </div>
 
           <div class="hero-stats" aria-label="Highlights Shizu Bot">
@@ -443,6 +447,27 @@
         <button id="toggle-animations" class="animation-toggle" type="button" title="Désactiver les animations">Animations</button>
       </div>
     </footer>
+
+    <!-- Modal Premium -->
+    <div id="premium-modal" class="modal" style="display: none;">
+      <div class="modal-content">
+        <span class="close" id="close-modal">&times;</span>
+        <h2>Devenir Premium</h2>
+        <p>Accès Premium au bot Shizu pour seulement 5€/mois !</p>
+        <ul>
+          <li>✨ Commandes exclusives</li>
+          <li>🎵 File d'attente prioritaire musique</li>
+          <li>⭐ Badge Premium sur le serveur</li>
+          <li>🎯 Support prioritaire</li>
+        </ul>
+        <form id="premium-form">
+          <label for="discord-id">Votre Discord ID :</label>
+          <input type="text" id="discord-id" placeholder="123456789012345678" required>
+          <small>Trouvez votre ID : Paramètres > Avancé > Activer le mode développeur, puis clic droit sur votre profil > Copier l'ID</small>
+          <button type="submit" class="btn btn-primary">Procéder au paiement</button>
+        </form>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>

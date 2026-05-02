@@ -524,6 +524,81 @@ window.addEventListener("beforeunload", () => {
   window.cancelAnimationFrame(rafId);
 });
 
+// Modal Premium
+const premiumBtn = document.getElementById('premium-btn');
+const premiumModal = document.getElementById('premium-modal');
+const closeModal = document.getElementById('close-modal');
+const premiumForm = document.getElementById('premium-form');
+
+if (premiumBtn && premiumModal) {
+  premiumBtn.addEventListener('click', () => {
+    premiumModal.style.display = 'block';
+  });
+
+  if (closeModal) {
+    closeModal.addEventListener('click', () => {
+      premiumModal.style.display = 'none';
+    });
+  }
+
+  window.addEventListener('click', (event) => {
+    if (event.target === premiumModal) {
+      premiumModal.style.display = 'none';
+    }
+  });
+}
+
+if (premiumForm) {
+  premiumForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const discordId = document.getElementById('discord-id').value.trim();
+    
+    // Validation plus souple pour les IDs Discord (17-20 chiffres)
+    if (!discordId || !/^\d{17,20}$/.test(discordId)) {
+      alert('Veuillez entrer un Discord ID valide (17-20 chiffres).\n\nTrouvez votre ID :\n1. Paramètres > Avancé > Activer le mode développeur\n2. Clic droit sur votre profil > Copier l\'ID');
+      return;
+    }
+    
+    // Pour le développement local, utiliser localhost
+    const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+      ? 'http://localhost:5002' 
+      : 'https://votredomaine.herokuapp.com';
+    
+    // En développement, utiliser l'endpoint de dev qui ne nécessite pas Stripe
+    const endpoint = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? '/dev/activate-premium'
+      : '/create-checkout-session';
+    
+    try {
+      const response = await fetch(`${backendUrl}${endpoint}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          discord_id: discordId,
+          guild_id: '123456789012345678' // Remplacez par l'ID de votre serveur Discord
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (data.url) {
+        window.location.href = data.url;
+      } else if (data.success) {
+        // Mode développement - redirection vers la page de succès
+        window.location.href = `success.html?session_id=dev_${discordId}`;
+      } else {
+        alert('Erreur: ' + (data.error || 'Impossible de créer la session de paiement'));
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+      alert('Erreur de connexion. Le backend n\'est peut-être pas démarré.\n\nPour tester localement :\n1. Lancez "python backend.py"\n2. Assurez-vous que le serveur tourne sur le port 5000');
+    }
+  });
+}
+
 // Safe initialization with error handling
 try {
   if (commandList) renderCommandsSafe();
