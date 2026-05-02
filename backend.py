@@ -132,7 +132,12 @@ def create_checkout_session():
 
         if DEV_MODE:
             # Mode développement - simuler une session Stripe
-            fake_session_url = f"http://localhost:8000/success.html?session_id=dev_{discord_id}"
+            frontend_origin = request.headers.get('Origin') or request.headers.get('Referer')
+            if frontend_origin:
+                frontend_origin = frontend_origin.split('?')[0].split('#')[0].rstrip('/')
+            else:
+                frontend_origin = FRONTEND_URL
+            fake_session_url = f"{frontend_origin}/success.html?session_id=dev_{discord_id}"
             return jsonify({'url': fake_session_url})
 
         # Créer une session Stripe Checkout
