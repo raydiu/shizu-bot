@@ -19,6 +19,59 @@
   <body>
     <canvas id="mana-field" aria-hidden="true"></canvas>
 
+    <svg class="svg-sprite" aria-hidden="true" focusable="false">
+      <symbol id="shizu-slime" viewBox="0 0 720 720">
+        <defs>
+          <radialGradient id="slime-aura" cx="50%" cy="42%" r="56%">
+            <stop offset="0%" stop-color="#F2FFFF" />
+            <stop offset="30%" stop-color="#8EF8FF" />
+            <stop offset="62%" stop-color="#33B8FF" />
+            <stop offset="100%" stop-color="#7D5CFF" />
+          </radialGradient>
+          <linearGradient id="slime-hair" x1="151" y1="107" x2="574" y2="536" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#F7FFFF" />
+            <stop offset="0.28" stop-color="#B9FBFF" />
+            <stop offset="0.66" stop-color="#4FD6FF" />
+            <stop offset="1" stop-color="#8A6CFF" />
+          </linearGradient>
+          <linearGradient id="slime-cloak" x1="177" y1="395" x2="542" y2="660" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#0B183C" />
+            <stop offset="0.5" stop-color="#103C6A" />
+            <stop offset="1" stop-color="#16114A" />
+          </linearGradient>
+          <linearGradient id="slime-gold" x1="222" y1="242" x2="498" y2="540" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FFF2A5" />
+            <stop offset="1" stop-color="#E6B75A" />
+          </linearGradient>
+          <filter id="slime-glow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="14" result="blur" />
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.25 0 0 0 0 0.92 0 0 0 0 1 0 0 0 0.8 0" />
+            <feBlend in2="SourceGraphic" mode="screen" />
+          </filter>
+        </defs>
+        <circle cx="360" cy="360" r="280" fill="#0A1233" opacity="0.72" />
+        <circle cx="360" cy="360" r="238" stroke="#65EFFF" stroke-opacity="0.32" stroke-width="5" stroke-dasharray="18 22" />
+        <circle cx="360" cy="360" r="188" stroke="#FFE28A" stroke-opacity="0.26" stroke-width="4" />
+        <path d="M360 74L388 145L464 149L404 196L424 270L360 229L296 270L316 196L256 149L332 145L360 74Z" fill="url(#slime-gold)" opacity="0.92" filter="url(#slime-glow)" />
+        <path d="M159 610C191 482 261 419 360 419C459 419 529 482 561 610C499 657 433 681 360 681C287 681 221 657 159 610Z" fill="url(#slime-cloak)" stroke="#65EFFF" stroke-opacity="0.35" stroke-width="6" />
+        <path d="M214 573C245 527 292 503 360 503C428 503 475 527 506 573" stroke="#A8F8FF" stroke-opacity="0.36" stroke-width="8" stroke-linecap="round" />
+        <path d="M360 113C468 156 536 254 524 366C511 489 430 565 360 565C290 565 209 489 196 366C184 254 252 156 360 113Z" fill="url(#slime-hair)" stroke="#DDFDFF" stroke-width="7" filter="url(#slime-glow)" />
+        <path d="M211 326C246 217 307 162 360 145C414 162 474 217 509 326C473 286 434 263 392 255C378 305 367 340 360 360C353 340 342 305 328 255C286 263 247 286 211 326Z" fill="#EFFFFF" opacity="0.65" />
+        <path d="M232 382C239 485 300 538 360 538C420 538 481 485 488 382C453 427 411 450 360 450C309 450 267 427 232 382Z" fill="#06152F" fill-opacity="0.24" />
+        <path d="M265 358C288 337 315 337 338 358" stroke="#051326" stroke-width="14" stroke-linecap="round" />
+        <path d="M382 358C405 337 432 337 455 358" stroke="#051326" stroke-width="14" stroke-linecap="round" />
+        <circle cx="306" cy="383" r="16" fill="#051326" />
+        <circle cx="415" cy="383" r="16" fill="#051326" />
+        <circle cx="312" cy="377" r="5" fill="#F2FFFF" />
+        <circle cx="421" cy="377" r="5" fill="#F2FFFF" />
+        <path d="M337 435C352 448 369 448 384 435" stroke="#051326" stroke-width="9" stroke-linecap="round" />
+        <path d="M194 293C152 306 122 331 105 368" stroke="#65EFFF" stroke-width="8" stroke-linecap="round" />
+        <path d="M526 293C568 306 598 331 615 368" stroke="#65EFFF" stroke-width="8" stroke-linecap="round" />
+        <path d="M210 520L146 552" stroke="#9B67FF" stroke-width="8" stroke-linecap="round" />
+        <path d="M510 520L574 552" stroke="#9B67FF" stroke-width="8" stroke-linecap="round" />
+      </symbol>
+    </svg>
+
     <div class="ambient ambient-one" aria-hidden="true"></div>
     <div class="ambient ambient-two" aria-hidden="true"></div>
     <div class="ambient ambient-three" aria-hidden="true"></div>
@@ -26,7 +79,7 @@
     <header class="site-header" data-reveal>
       <a class="brand" href="#home" aria-label="Accueil Shizu Bot">
         <span class="brand-mark">
-          <img src="assets/tempest-slime.svg" alt="" />
+          <svg viewBox="0 0 720 720" aria-hidden="true"><use href="#shizu-slime"></use></svg>
         </span>
         <span>Shizu Bot</span>
       </a>
@@ -94,7 +147,9 @@
               <span></span>
               <strong>Shizu Voice Core</strong>
             </div>
-            <img class="slime-portrait" src="assets/tempest-slime.svg" alt="Mascotte slime anime de Shizu Bot" />
+            <svg class="slime-portrait" viewBox="0 0 720 720" role="img" aria-label="Mascotte slime anime de Shizu Bot">
+              <use href="#shizu-slime"></use>
+            </svg>
             <div class="equalizer" aria-hidden="true">
               <span></span>
               <span></span>
@@ -167,7 +222,9 @@
 
           <div class="player-card">
             <div class="player-cover">
-              <img src="assets/tempest-slime.svg" alt="Shizu Bot en mode vocal" />
+              <svg viewBox="0 0 720 720" role="img" aria-label="Shizu Bot en mode vocal">
+                <use href="#shizu-slime"></use>
+              </svg>
             </div>
             <div class="player-info">
               <span>Now Playing</span>
