@@ -2,22 +2,47 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Shizu Bot, bot Discord fun avec musique, vocal, mini-jeux, économie, RP anime et ambiance Tempest slime."
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="description" content="Shizu Bot, bot Discord fun avec musique, vocal, mini-jeux, économie, RP anime et ambiance Tempest slime." />
+    <meta name="keywords" content="Discord bot, musique, jeux, anime, RPG" />
+    <meta name="theme-color" content="#050716" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' https:; connect-src 'self' https://discord.com; frame-ancestors 'none';" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    
     <title>Shizu Bot - Fun Discord Tempest</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://discord.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@600;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="preload" as="script" href="script.js" />
   </head>
   <body>
+    <noscript>
+      <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: #050716; color: #eff8ff; font-family: Inter, sans-serif;">
+        <div style="text-align: center; padding: 20px;">
+          <h1>JavaScript requis</h1>
+          <p>Ce site nécessite JavaScript pour fonctionner correctement. Veuillez activer JavaScript dans vos paramètres de navigateur.</p>
+        </div>
+      </div>
+    </noscript>
+
     <canvas id="mana-field" aria-hidden="true"></canvas>
+
+    <!-- Background overlay pour mobile -->
+    <div class="mobile-bg-overlay" aria-hidden="true"></div>
 
     <svg class="svg-sprite" aria-hidden="true" focusable="false">
       <symbol id="shizu-slime" viewBox="0 0 720 720">
@@ -79,7 +104,7 @@
     <header class="site-header" data-reveal>
       <a class="brand" href="#home" aria-label="Accueil Shizu Bot">
         <span class="brand-mark">
-          <img src="https://i.pinimg.com/736x/9b/84/fc/9b84fc60347b1f7c6ce15f18c73d8eff.jpg" alt="Shizu Bot Logo">
+          <img src="https://i.pinimg.com/736x/9b/84/fc/9b84fc60347b1f7c6ce15f18c73d8eff.jpg" alt="Shizu Bot Logo" loading="lazy" decoding="async">
         </span>
         <span>Shizu Bot</span>
       </a>
@@ -149,7 +174,7 @@
               <span></span>
               <strong>Shizu Voice Core</strong>
             </div>
-            <img src="https://i.pinimg.com/736x/fc/eb/41/fceb41ed28b6e8abd4018a75028c76b3.jpg" alt="Shizu Bot en mode vocal" class="slime-portrait">
+            <img src="https://i.pinimg.com/736x/fc/eb/41/fceb41ed28b6e8abd4018a75028c76b3.jpg" alt="Shizu Bot en mode vocal" class="slime-portrait" loading="lazy" decoding="async">
             <div class="equalizer" aria-hidden="true">
               <span></span>
               <span></span>
@@ -221,7 +246,7 @@
 
           <div class="player-card">
             <div class="player-cover">
-              <img src="https://i.pinimg.com/736x/37/28/35/37283551f4cd5f0e9d86f3303c38e00e.jpg" alt="Shizu Bot en mode vocal">
+              <img src="https://i.pinimg.com/736x/37/28/35/37283551f4cd5f0e9d86f3303c38e00e.jpg" alt="Shizu Bot en mode vocal" loading="lazy" decoding="async">
             </div>
             <div class="player-info">
               <span>Now Playing</span>
@@ -320,7 +345,8 @@
           <div class="help-list" id="help-list" aria-live="polite"></div>
         </div>
       </section>
-
+    
+      
       <section id="invite" class="invite section-shell">
         <div class="invite-card" data-reveal>
           <div class="invite-sigil" aria-hidden="true"></div>
@@ -413,6 +439,8 @@
         <a href="#terms">Conditions d'Utilisation</a>
         <span>•</span>
         <a href="#privacy">Politique de Confidentialité</a>
+        <span>•</span>
+        <button id="toggle-animations" class="animation-toggle" type="button" title="Désactiver les animations">Animations</button>
       </div>
     </footer>
 
