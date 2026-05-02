@@ -143,21 +143,23 @@ def create_checkout_session():
         # Créer une session Stripe Checkout
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
-            line_items=[{
-                'price_data': {
-                    'currency': 'eur',
-                    'product_data': {
-                        'name': 'Shizu Bot Premium',
-                        'description': 'Accès Premium mensuel au bot Discord',
-                    },
-                    'unit_amount': PREMIUM_PRICE,
-                    'recurring': {
-                        'interval': 'month'
-                    }
-                },
-                'quantity': 1,
-            }],
             mode='subscription',  # Abonnement mensuel
+            subscription_data={
+                'items': [{
+                    'price_data': {
+                        'currency': 'eur',
+                        'product_data': {
+                            'name': 'Shizu Bot Premium',
+                            'description': 'Accès Premium mensuel au bot Discord',
+                        },
+                        'unit_amount': PREMIUM_PRICE,
+                        'recurring': {
+                            'interval': 'month'
+                        }
+                    },
+                    'quantity': 1,
+                }]
+            },
             success_url=f"{FRONTEND_URL}/success.html?session_id={{CHECKOUT_SESSION_ID}}",
             cancel_url=f"{FRONTEND_URL}/",
             metadata={
