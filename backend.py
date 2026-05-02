@@ -131,13 +131,12 @@ def create_checkout_session():
             return jsonify({'error': 'Discord ID requis'}), 400
 
         if DEV_MODE:
-            # Mode développement - simuler une session Stripe
-            frontend_origin = request.headers.get('Origin') or request.headers.get('Referer')
-            if frontend_origin:
-                frontend_origin = frontend_origin.split('?')[0].split('#')[0].rstrip('/')
-            else:
-                frontend_origin = FRONTEND_URL
-            fake_session_url = f"{frontend_origin}/success.html?session_id=dev_{discord_id}"
+            # Mode développement - simuler une session Stripe avec le frontend configuré
+            frontend_url = FRONTEND_URL.rstrip('/') if FRONTEND_URL else None
+            if not frontend_url:
+                frontend_url = request.headers.get('Origin') or request.headers.get('Referer') or 'http://localhost:8000'
+                frontend_url = frontend_url.split('?')[0].split('#')[0].rstrip('/')
+            fake_session_url = f"{frontend_url}/success.html?session_id=dev_{discord_id}"
             return jsonify({'url': fake_session_url})
 
         # Créer une session Stripe Checkout
