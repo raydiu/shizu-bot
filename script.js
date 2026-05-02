@@ -562,8 +562,8 @@ if (premiumForm) {
     
     // Pour le développement local, utiliser localhost
     const backendUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-      ? 'http://localhost:5002' 
-      : 'https://votredomaine.herokuapp.com';
+      ? 'http://localhost:5001' 
+      : 'https://shizu-bot-backend-production.up.railway.app';
     
     // En développement, utiliser l'endpoint de dev qui ne nécessite pas Stripe
     const endpoint = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
@@ -594,7 +594,7 @@ if (premiumForm) {
       }
     } catch (error) {
       console.error('Erreur:', error);
-      alert('Erreur de connexion. Le backend n\'est peut-être pas démarré.\n\nPour tester localement :\n1. Lancez "python backend.py"\n2. Assurez-vous que le serveur tourne sur le port 5000');
+      alert('Erreur de connexion. Le backend n\'est peut-être pas démarré.\n\nPour tester localement :\n1. Lancez "python backend.py"\n2. Assurez-vous que le serveur tourne sur le port 5001');
     }
   });
 }
